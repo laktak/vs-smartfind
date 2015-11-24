@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="3b28ec01-ab7f-427a-81d3-afc41415ee5e" Version="1.5" Language="en-US" Publisher="Christian Zangl" />
+    <Identity Id="3b28ec01-ab7f-427a-81d3-afc41415ee5e" Version="1.6" Language="en-US" Publisher="Christian Zangl" />
     <DisplayName>SmartFind</DisplayName>
     <Description xml:space="preserve">SmartFind keeps your preferred find options.</Description>
     <License>license.txt</License>
@@ -9,9 +9,9 @@
     <Tags>find, search, find-in-files, options</Tags>
   </Metadata>
   <Installation InstalledByMsi="false">
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0,15.0)" />
-    <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Community" />
-    <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Enterprise" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,15.0]" />
+    <InstallationTarget Version="[11.0,15.0]" Id="Microsoft.VisualStudio.Community" />
+    <InstallationTarget Version="[11.0,15.0]" Id="Microsoft.VisualStudio.Enterprise" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
