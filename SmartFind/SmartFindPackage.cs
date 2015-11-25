@@ -38,7 +38,7 @@ namespace ChristianZangl.SmartFind
   [Guid(GuidList.guidSmartFindPkgString)]
   public sealed class SmartFindPackage : Package
   {
-    public static readonly string SettingsFile=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Visual Studio 2012\Settings\SmartFind.vssettings");
+    public static readonly string SettingsFile;
     public static SmartFindPackage Instance { get; private set; }
 
     /// <summary>
@@ -52,6 +52,19 @@ namespace ChristianZangl.SmartFind
     {
       Instance=this;
       Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
+    }
+
+    static SmartFindPackage()
+    {
+      string[] versions= { "2012", "2013", "2015" };
+      string dir=null;
+      foreach (string v in versions)
+      {
+        dir=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Visual Studio "+v+"\\Settings");
+        if (Directory.Exists(dir)) break;
+      }
+      Directory.CreateDirectory(dir);
+      SettingsFile=Path.Combine(dir, "SmartFind.vssettings");
     }
 
     /// <summary>
@@ -89,7 +102,17 @@ namespace ChristianZangl.SmartFind
       var dte=Package.GetGlobalService(typeof(_DTE)) as _DTE;
       dte.ExecuteCommand("Tools.ImportandExportSettings", "/export:\""+SmartFindPackage.SettingsFile+"\"");
 
-      var doc=XElement.Load(SmartFindPackage.SettingsFile);
+      XElement doc=null;
+      for (int retry=10; ; retry--)
+      {
+        try
+        {
+          doc=XElement.Load(SmartFindPackage.SettingsFile);
+          break;
+        }
+        catch { if (retry<=0) throw; else System.Threading.Thread.Sleep(500); }
+      }
+
       foreach (var item in doc.Elements().ToArray())
       {
         if (item.Name=="ApplicationIdentity") { }
@@ -109,7 +132,15 @@ namespace ChristianZangl.SmartFind
         }
         else item.Remove();
       }
-      doc.Save(SmartFindPackage.SettingsFile);
+      for (int retry=10; ; retry--)
+      {
+        try
+        {
+          doc.Save(SmartFindPackage.SettingsFile);
+          break;
+        }
+        catch { if (retry<=0) throw; else System.Threading.Thread.Sleep(500); }
+      }
 
       string text="SmartFind will set the currently active options every time you open the find/replace dialogs.";
       if (initial) text+="\r\n\r\nYou can update the options using the Tools/Reset SmartFind menu.";
